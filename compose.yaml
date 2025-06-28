@@ -1,0 +1,38 @@
+﻿version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: synthetic_grass_db
+    environment:
+      POSTGRES_DB: synthetic_grass_clients
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - synthetic_grass_network
+
+  api:
+    build:
+      context: .
+      dockerfile: src/SyntheticGrassClientFinder.Api/Dockerfile
+    container_name: synthetic_grass_api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=synthetic_grass_clients;Username=postgres;Password=postgres123
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - synthetic_grass_network
+
+volumes:
+  postgres_data:
+
+networks:
+  synthetic_grass_network:
+    driver: bridge

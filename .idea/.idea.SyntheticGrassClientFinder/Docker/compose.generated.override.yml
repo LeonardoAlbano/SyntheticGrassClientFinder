@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.8"
+services:
+  api:
+    build:
+      context: "/Users/leonardoalbano/RiderProjects/SyntheticGrassClientFinder"
+      dockerfile: "src/SyntheticGrassClientFinder.Api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/SyntheticGrassClientFinder.Api.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "syntheticgrassclientfinder.api:dev"
+    ports: []
+    volumes:
+    - "/Users/leonardoalbano/RiderProjects/SyntheticGrassClientFinder/src/SyntheticGrassClientFinder.Api:/app:rw"
+    - "/Users/leonardoalbano/RiderProjects/SyntheticGrassClientFinder:/src:rw"
+    - "/Users/leonardoalbano/.nuget/packages:/root/.nuget/packages"
+    working_dir: "/app"
