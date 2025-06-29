@@ -50,10 +50,7 @@ public class ClientsController : ControllerBase
             });
         }
     }
-
-    /// <summary>
-    /// 📋 Obtém todos os clientes cadastrados no sistema
-    /// </summary>
+    
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<ClientResponse>), 200)]
     public async Task<ActionResult<IEnumerable<ClientResponse>>> GetAllClients(CancellationToken cancellationToken)
@@ -78,10 +75,7 @@ public class ClientsController : ControllerBase
 
         return Ok(response);
     }
-
-    /// <summary>
-    /// 📊 Obtém estatísticas dos clientes cadastrados
-    /// </summary>
+    
     [HttpGet("statistics")]
     [ProducesResponseType(typeof(object), 200)]
     public async Task<ActionResult<object>> GetStatistics(CancellationToken cancellationToken)
@@ -119,10 +113,7 @@ public class ClientsController : ControllerBase
 
         return Ok(statistics);
     }
-
-    /// <summary>
-    /// 🎯 Exemplos de busca que funcionam imediatamente
-    /// </summary>
+    
     [HttpGet("demo")]
     [ProducesResponseType(typeof(object), 200)]
     public ActionResult<object> GetDemoExamples()

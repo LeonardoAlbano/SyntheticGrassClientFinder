@@ -9,11 +9,9 @@ using SyntheticGrassClientFinder.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Database
 builder.Services.AddDbContext<SyntheticGrassDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Services - APENAS OS ESSENCIAIS
 builder.Services.AddHttpClient<FixedOpenStreetMapGeocodingService>();
 builder.Services.AddHttpClient<OptimizedRealClientService>();
 
@@ -23,7 +21,6 @@ builder.Services.AddScoped<IPlacesSearchService, OptimizedRealClientService>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<ISearchClientsUseCase, SearchClientsUseCase>();
 
-// API
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -51,7 +48,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -64,14 +60,12 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Auto Migration
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<SyntheticGrassDbContext>();
     await context.Database.MigrateAsync();
 }
 
-// Configure pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

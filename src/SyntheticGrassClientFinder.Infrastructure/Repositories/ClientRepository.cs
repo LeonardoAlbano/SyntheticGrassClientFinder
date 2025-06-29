@@ -27,7 +27,6 @@ public class ClientRepository : IClientRepository
 
     public async Task<IEnumerable<Client>> GetByLocationAsync(Location center, double radiusKm, CancellationToken cancellationToken = default)
     {
-        // Simplified distance calculation for PostgreSQL
         var clients = await _context.Clients.ToListAsync(cancellationToken);
         return clients.Where(c => c.Location.DistanceTo(center) <= radiusKm);
     }

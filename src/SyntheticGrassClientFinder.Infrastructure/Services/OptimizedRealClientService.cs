@@ -39,16 +39,14 @@ public class OptimizedRealClientService : IPlacesSearchService
             _logger.LogInformation("🎯 Buscando CLIENTES REAIS - Coordenadas: {Lat}, {Lng}", 
                 location.Latitude.ToString(CultureInfo.InvariantCulture), 
                 location.Longitude.ToString(CultureInfo.InvariantCulture));
-
-            // 1. HERE API com formato correto
+            
             if (!string.IsNullOrEmpty(_hereApiKey))
             {
                 var hereResults = await SearchHEREOptimized(location, radiusMeters, cancellationToken);
                 allResults.AddRange(hereResults);
                 _logger.LogInformation("🗺️ HERE API encontrou: {Count} clientes reais", hereResults.Count());
             }
-
-            // 2. OpenStreetMap como backup
+            
             if (allResults.Count < 10)
             {
                 var osmResults = await SearchOSMOptimized(location, cancellationToken);
@@ -74,8 +72,7 @@ public class OptimizedRealClientService : IPlacesSearchService
         CancellationToken cancellationToken)
     {
         var results = new List<PlaceSearchResult>();
-
-        // Categorias mais específicas e eficientes
+        
         var categories = new[]
         {
             "school", "gym", "fitness", "hotel", "sports"
@@ -85,7 +82,6 @@ public class OptimizedRealClientService : IPlacesSearchService
         {
             try
             {
-                // FORMATO CORRETO com InvariantCulture
                 var lat = location.Latitude.ToString(CultureInfo.InvariantCulture);
                 var lng = location.Longitude.ToString(CultureInfo.InvariantCulture);
                 
@@ -114,8 +110,7 @@ public class OptimizedRealClientService : IPlacesSearchService
                                 var address = ValidateAndImproveAddress(BuildCompleteAddress(item.address, item.title), item.title);
                                 var phone = ExtractPhone(item.contacts);
                                 var website = ExtractWebsite(item.contacts);
-
-                                // Log para debug
+                                
                                 _logger.LogInformation("📍 {Name} - {Address} - Tel: {Phone}", 
                                     item.title, address, phone ?? "N/A");
 
@@ -158,7 +153,6 @@ public class OptimizedRealClientService : IPlacesSearchService
         {
             var results = new List<PlaceSearchResult>();
             
-            // Busca mais específica no OSM
             var queries = new[] { "escola joinville", "academia joinville", "hotel joinville" };
 
             foreach (var query in queries)
@@ -224,13 +218,11 @@ public class OptimizedRealClientService : IPlacesSearchService
 
     private string TruncateName(string name)
     {
-        // Truncar para 50 caracteres para evitar erro de DB
         return name.Length > 50 ? name.Substring(0, 47) + "..." : name;
     }
 
     private string TruncateAddress(string address)
     {
-        // Truncar endereço para 200 caracteres
         return address.Length > 200 ? address.Substring(0, 197) + "..." : address;
     }
 

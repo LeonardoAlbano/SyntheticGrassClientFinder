@@ -14,7 +14,6 @@ public class SyntheticGrassDbContext : DbContext
     {
         modelBuilder.Entity<Client>(entity =>
         {
-            // Chave primária
             entity.HasKey(e => e.Id);
             
             entity.Property(e => e.Id)
@@ -22,8 +21,7 @@ public class SyntheticGrassDbContext : DbContext
                     id => id.Value,
                     value => new ClientId(value))
                 .ValueGeneratedNever();
-
-            // Propriedades básicas
+            
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(255);
@@ -44,8 +42,7 @@ public class SyntheticGrassDbContext : DbContext
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-            // Address Value Object
+            
             entity.OwnsOne(e => e.Address, address =>
             {
                 address.Property(a => a.Street).HasColumnName("Street").HasMaxLength(500);
@@ -54,15 +51,13 @@ public class SyntheticGrassDbContext : DbContext
                 address.Property(a => a.PostalCode).HasColumnName("PostalCode").HasMaxLength(20);
                 address.Property(a => a.Country).HasColumnName("Country").HasMaxLength(50);
             });
-
-            // Location Value Object
+            
             entity.OwnsOne(e => e.Location, location =>
             {
                 location.Property(l => l.Latitude).HasColumnName("Latitude").HasPrecision(10, 8);
                 location.Property(l => l.Longitude).HasColumnName("Longitude").HasPrecision(11, 8);
             });
-
-            // ContactInfo Value Object (opcional)
+            
             entity.OwnsOne(e => e.ContactInfo, contact =>
             {
                 contact.Property(c => c.Phone).HasColumnName("Phone").HasMaxLength(50);
@@ -70,8 +65,7 @@ public class SyntheticGrassDbContext : DbContext
                 contact.Property(c => c.Website).HasColumnName("Website").HasMaxLength(500);
                 contact.Property(c => c.SocialMedia).HasColumnName("SocialMedia").HasMaxLength(500);
             });
-
-            // Índices simples (não compostos)
+            
             entity.HasIndex(e => e.Name).HasDatabaseName("IX_Clients_Name");
             entity.HasIndex(e => e.Type).HasDatabaseName("IX_Clients_Type");
             entity.HasIndex(e => e.Status).HasDatabaseName("IX_Clients_Status");

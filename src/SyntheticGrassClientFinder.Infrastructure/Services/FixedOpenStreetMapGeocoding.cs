@@ -16,8 +16,6 @@ public class FixedOpenStreetMapGeocodingService : IGeocodingService
     {
         _httpClient = httpClient;
         _logger = logger;
-        
-        // Configurar User-Agent obrigatório para Nominatim
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "SyntheticGrassClientFinder/1.0 (contato@exemplo.com)");
     }
@@ -51,13 +49,11 @@ public class FixedOpenStreetMapGeocodingService : IGeocodingService
                 
                 _logger.LogInformation("🔍 Raw coordinates from Nominatim: lat='{Lat}', lng='{Lng}'", result.lat, result.lon);
                 
-                // Parse com cultura invariante para evitar problemas de localização
                 if (double.TryParse(result.lat, NumberStyles.Float, CultureInfo.InvariantCulture, out var lat) &&
                     double.TryParse(result.lon, NumberStyles.Float, CultureInfo.InvariantCulture, out var lng))
                 {
                     _logger.LogInformation("✅ Parsed coordinates: lat={Lat}, lng={Lng}", lat, lng);
                     
-                    // Verificar se as coordenadas estão em um range válido
                     if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180)
                     {
                         _logger.LogInformation("✅ Coordinates are valid for {Address}: {Lat}, {Lng}", address, lat, lng);
